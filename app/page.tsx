@@ -3,28 +3,23 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Zap, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Loader2, FileSpreadsheet, Rocket, ScanSearch } from "lucide-react";
+import {
+  Zap, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Loader2,
+  FileSpreadsheet, Rocket, ScanSearch, X, Sparkles, Clock, MousePointerClick,
+  TrendingUp, BookOpen, Coffee
+} from "lucide-react";
 
-interface Container {
-  containerId: string;
-  name: string;
-  publicId: string;
-}
-
-interface Account {
-  accountId: string;
-  name: string;
-  containers: Container[];
-}
+interface Container { containerId: string; name: string; publicId: string; }
+interface Account   { accountId: string; name: string; containers: Container[]; }
 
 export default function Home() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState("");
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState("");
+  const [accounts, setAccounts]         = useState<Account[]>([]);
+  const [selectedAccount, setSelectedAccount]     = useState("");
   const [selectedContainer, setSelectedContainer] = useState("");
-  const [showGtm, setShowGtm] = useState(false);
+  const [showGtm, setShowGtm]           = useState(false);
 
   useEffect(() => {
     fetch("/api/gtm/accounts")
@@ -66,53 +61,104 @@ export default function Home() {
           <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">대시보드</Link>
           <Link href="/auth/login" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">로그인</Link>
           <Link href="/auth/signup" className="text-sm bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-colors font-medium">
-            시작하기
+            무료 시작
           </Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-lg space-y-8">
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center gap-1.5 text-xs text-blue-400 bg-blue-950/60 border border-blue-900 px-3 py-1 rounded-full mb-2">
-              <Zap className="w-3 h-3" />
-              AI 기반 GA4 이벤트 자동화
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-14">
+        <div className="w-full max-w-xl space-y-10">
+
+          {/* ── Hero ── */}
+          <div className="text-center space-y-4">
+            {/* 자극 뱃지 */}
+            <div className="inline-flex items-center gap-2 text-xs text-orange-400 bg-orange-950/50 border border-orange-900/60 px-3 py-1.5 rounded-full">
+              <Sparkles className="w-3 h-3" />
+              GTM 태그 설정, 이제 AI가 대신합니다
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              URL 하나로<br />GA4 택소노미 완성
+
+            <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
+              GTM 공부<br />
+              <span className="text-blue-400">안 해도 됩니다.</span>
             </h1>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              페이지를 분석하고 GA4 이벤트 명세서를 자동 생성합니다<br />
-              마케터도 개발자도 5분 안에 완료
+
+            <p className="text-gray-400 text-base leading-relaxed">
+              URL 하나 넣으면 GA4 이벤트 택소노미가 완성됩니다<br />
+              <span className="text-gray-500 text-sm">더 이상 개발자한테 부탁 안 해도 돼요</span>
+            </p>
+
+            {/* CTA */}
+            <button
+              onClick={() => handleStart(false)}
+              className="w-full bg-blue-600 hover:bg-blue-500 rounded-xl py-4 text-base font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/40 hover:shadow-blue-900/60 hover:scale-[1.01]"
+            >
+              <ScanSearch className="w-5 h-5" />
+              지금 바로 분석하기 — 무료
+            </button>
+            <p className="text-xs text-gray-600">신용카드 없음 · 설치 없음 · 5분이면 충분</p>
+          </div>
+
+          {/* ── Before / After ── */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Before */}
+            <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-red-950/60 border border-red-900/50 flex items-center justify-center">
+                  <X className="w-3 h-3 text-red-400" />
+                </div>
+                <span className="text-xs font-semibold text-red-300">기존 방식</span>
+              </div>
+              <ul className="space-y-2 text-xs text-gray-500">
+                {[
+                  [BookOpen,         "GTM 강의 수십 시간"],
+                  [Clock,            "이벤트 설계 며칠 소요"],
+                  [MousePointerClick,"개발자와 핑퐁 커뮤니케이션"],
+                  [FileSpreadsheet,  "엑셀 수작업 정리"],
+                ].map(([Icon, label]) => (
+                  <li key={label as string} className="flex items-center gap-2">
+                    <Icon className="w-3 h-3 shrink-0 text-gray-600" />
+                    {label as string}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* After */}
+            <div className="bg-blue-950/20 border border-blue-900/40 rounded-2xl p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-green-950/60 border border-green-900/50 flex items-center justify-center">
+                  <CheckCircle2 className="w-3 h-3 text-green-400" />
+                </div>
+                <span className="text-xs font-semibold text-green-300">TagAuto AI</span>
+              </div>
+              <ul className="space-y-2 text-xs text-gray-300">
+                {[
+                  [Zap,              "URL 입력 하나"],
+                  [Clock,            "5분 안에 완성"],
+                  [TrendingUp,       "마케터 인사이트 자동 포함"],
+                  [FileSpreadsheet,  "엑셀 명세서 즉시 다운로드"],
+                ].map(([Icon, label]) => (
+                  <li key={label as string} className="flex items-center gap-2">
+                    <Icon className="w-3 h-3 shrink-0 text-blue-400" />
+                    {label as string}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* ── 한줄 훅 ── */}
+          <div className="text-center py-3 border-y border-gray-900 space-y-1">
+            <p className="text-sm text-gray-400">
+              <span className="text-white font-semibold">구매 완료, 장바구니, 회원가입</span> 페이지도
+            </p>
+            <p className="text-sm text-gray-500">
+              크롬 익스텐션으로 로그인 상태 그대로 캡처 → 즉시 분석
             </p>
           </div>
 
-          {/* CTA */}
-          <button
-            onClick={() => handleStart(false)}
-            className="w-full bg-blue-600 hover:bg-blue-500 rounded-xl py-3.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-900/30"
-          >
-            <ScanSearch className="w-4 h-4" />
-            무료로 분석 시작
-          </button>
-
-          {/* Feature pills */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { icon: ScanSearch, label: "AI 크롤링" },
-              { icon: FileSpreadsheet, label: "Excel 명세서" },
-              { icon: Rocket, label: "GTM 자동 배포" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-3 flex flex-col items-center gap-2">
-                <Icon className="w-5 h-5 text-blue-400" />
-                <span className="text-xs text-gray-400">{label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* GTM 연결 (선택) */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+          {/* ── GTM 연결 (선택) ── */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
             <button
               onClick={() => setShowGtm((v) => !v)}
               className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-800/50 transition-colors"
@@ -130,7 +176,7 @@ export default function Home() {
                     ? "GTM 연결 확인 중..."
                     : gtmConnected
                     ? "GTM 연결됨 — 바로 배포 가능"
-                    : "GTM 미연결 — 택소노미만 생성"}
+                    : "GTM 연결 (선택) — 없어도 엑셀 다운로드 가능"}
                 </span>
               </div>
               {showGtm
@@ -185,16 +231,23 @@ export default function Home() {
                     <button
                       onClick={() => handleStart(true)}
                       disabled={!selectedAccount || !selectedContainer}
-                      className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-40 rounded-lg py-2 text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-40 rounded-xl py-2.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2"
                     >
                       <Rocket className="w-4 h-4" />
-                      GTM 연결 후 분석 시작
+                      GTM 연결 후 분석 + 자동 배포
                     </button>
                   </div>
                 )}
               </div>
             )}
           </div>
+
+          {/* ── 소셜 훅 ── */}
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
+            <Coffee className="w-3.5 h-3.5" />
+            <span>커피 한 잔 마시는 동안 GA4 셋업 끝납니다</span>
+          </div>
+
         </div>
       </div>
     </div>
