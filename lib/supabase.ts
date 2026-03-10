@@ -48,6 +48,24 @@ export interface AnalysisSession {
   approved_events: TaxonomyEvent[] | null;
   gtm_workspace_id: string | null;
   error_message: string | null;
+  screenshot_path: string | null;
+  capture_metadata: {
+    viewport?: { width: number; height: number };
+    devicePixelRatio?: number;
+    scrollY?: number;
+    scrollX?: number;
+    capturedAt?: string;
+  } | null;
+  element_rects: Array<{
+    selector?: string;
+    text?: string;
+    eventName?: string;
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  }> | null;
+  capture_source: "extension" | "crawl" | null;
   created_at: string;
   updated_at: string;
 }
