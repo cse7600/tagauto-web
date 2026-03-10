@@ -81,12 +81,13 @@ function buildTag(event: TaxonomyEvent, triggerId: string, accountId: string, co
 }
 
 export async function POST(req: NextRequest) {
-  const { events, accountId, containerId } = await req.json();
+  const { events, accountId, containerId, googleToken } = await req.json();
   if (!events?.length) return NextResponse.json({ error: "배포할 이벤트 없음" }, { status: 400 });
   if (!accountId || !containerId) return NextResponse.json({ error: "GTM 계정/컨테이너 필요" }, { status: 400 });
 
   try {
-    const accessToken = await getGtmToken();
+    // 사용자 토큰 우선, 없으면 서비스 계정 폴백
+    const accessToken = googleToken ?? (await getGtmToken());
     const wsBase = `https://www.googleapis.com/tagmanager/v2/accounts/${accountId}/containers/${containerId}`;
     const headers = { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" };
 
