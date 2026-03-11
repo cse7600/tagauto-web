@@ -3,14 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 export const maxDuration = 60;
 
 async function getBrowser() {
-  // Vercel 환경: chromium-min 사용
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  // Vercel / 서버리스 환경: @sparticuz/chromium-min 사용
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_VERSION) {
     const chromium = await import("@sparticuz/chromium-min");
     const playwright = await import("playwright-core");
     return playwright.chromium.launch({
       args: chromium.default.args,
       executablePath: await chromium.default.executablePath(
-        "https://github.com/Sparticuz/chromium/releases/download/v131.0.0/chromium-v131.0.0-pack.tar"
+        "https://github.com/Sparticuz/chromium/releases/download/v143.0.0/chromium-v143.0.0-pack.tar"
       ),
       headless: true,
     });
